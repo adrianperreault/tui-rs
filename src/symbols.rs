@@ -80,7 +80,6 @@ pub mod line_dash_triple {
     pub const HORIZONTAL: &str = "┄";
 }
 
-
 pub mod quadrant_blocks {
     pub const QUADRANT_LOWER_LEFT: &str = "▖";
     pub const QUADRANT_LOWER_RIGHT: &str = "▗";
@@ -92,6 +91,32 @@ pub mod quadrant_blocks {
     pub const QUADRANT_UPPER_RIGHT: &str = "▝";
     pub const QUADRANT_UPPER_RIGHT_AND_LOWER_LEFT: &str = "▞";
     pub const QUADRANT_UPPER_RIGHT_AND_LOWER_LEFT_AND_LOWER_RIGHT: &str = "▟";
+}
+
+pub mod circles_black {
+    pub const _1: &str = "➊";
+    pub const _2: &str = "➋";
+    pub const _3: &str = "➌";
+    pub const _4: &str = "➍";
+    pub const _5: &str = "➎";
+    pub const _6: &str = "➏";
+    pub const _7: &str = "➐";
+    pub const _8: &str = "➑";
+    pub const _9: &str = "➒";
+    pub const _10: &str = "➓";
+}
+
+pub mod circles_white {
+    pub const _1: &str = "➀";
+    pub const _2: &str = "➁";
+    pub const _3: &str = "➂";
+    pub const _4: &str = "➃";
+    pub const _5: &str = "➄";
+    pub const _6: &str = "➅";
+    pub const _7: &str = "➆";
+    pub const _8: &str = "➇";
+    pub const _9: &str = "➈";
+    pub const _10: &str = "➉";
 }
 
 pub const DOT: &str = "•";
