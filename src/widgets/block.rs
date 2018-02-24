@@ -2,7 +2,15 @@ use buffer::Buffer;
 use layout::Rect;
 use style::Style;
 use widgets::{Borders, Widget};
-use symbols::line;
+
+
+use symbols::{line,
+              line_heavy,
+              line_dash_double,
+              line_dash_triple,
+              line_rounded,
+              line_double};
+use style::LineType;
 
 /// Base widget to be used with all upper level ones. It may be used to display a box border around
 /// the widget and/or add a title.
@@ -110,54 +118,54 @@ impl<'a> Widget for Block<'a> {
         if self.borders.intersects(Borders::LEFT) {
             for y in area.top()..area.bottom() {
                 buf.get_mut(area.left(), y)
-                    .set_symbol(line::VERTICAL)
-                    .set_style(self.border_style);
+                   .set_symbol(get_symbol_for_line_type(line::VERTICAL, self.border_style))
+                   .set_style(self.border_style);
             }
         }
         if self.borders.intersects(Borders::TOP) {
             for x in area.left()..area.right() {
                 buf.get_mut(x, area.top())
-                    .set_symbol(line::HORIZONTAL)
-                    .set_style(self.border_style);
+                   .set_symbol(get_symbol_for_line_type(line::HORIZONTAL, self.border_style))
+                   .set_style(self.border_style);
             }
         }
         if self.borders.intersects(Borders::RIGHT) {
             let x = area.right() - 1;
             for y in area.top()..area.bottom() {
                 buf.get_mut(x, y)
-                    .set_symbol(line::VERTICAL)
-                    .set_style(self.border_style);
+                   .set_symbol(get_symbol_for_line_type(line::VERTICAL, self.border_style))
+                   .set_style(self.border_style);
             }
         }
         if self.borders.intersects(Borders::BOTTOM) {
             let y = area.bottom() - 1;
             for x in area.left()..area.right() {
                 buf.get_mut(x, y)
-                    .set_symbol(line::HORIZONTAL)
-                    .set_style(self.border_style);
+                   .set_symbol(get_symbol_for_line_type(line::HORIZONTAL, self.border_style))
+                   .set_style(self.border_style);
             }
         }
 
         // Corners
         if self.borders.contains(Borders::LEFT | Borders::TOP) {
             buf.get_mut(area.left(), area.top())
-                .set_symbol(line::TOP_LEFT)
-                .set_style(self.border_style);
+               .set_symbol(get_symbol_for_line_type(line::TOP_LEFT, self.border_style))
+               .set_style(self.border_style);
         }
         if self.borders.contains(Borders::RIGHT | Borders::TOP) {
             buf.get_mut(area.right() - 1, area.top())
-                .set_symbol(line::TOP_RIGHT)
-                .set_style(self.border_style);
+               .set_symbol(get_symbol_for_line_type(line::TOP_RIGHT, self.border_style))
+               .set_style(self.border_style);
         }
         if self.borders.contains(Borders::LEFT | Borders::BOTTOM) {
             buf.get_mut(area.left(), area.bottom() - 1)
-                .set_symbol(line::BOTTOM_LEFT)
-                .set_style(self.border_style);
+               .set_symbol(get_symbol_for_line_type(line::BOTTOM_LEFT, self.border_style))
+               .set_style(self.border_style);
         }
         if self.borders.contains(Borders::RIGHT | Borders::BOTTOM) {
             buf.get_mut(area.right() - 1, area.bottom() - 1)
-                .set_symbol(line::BOTTOM_RIGHT)
-                .set_style(self.border_style);
+               .set_symbol(get_symbol_for_line_type(line::BOTTOM_RIGHT, self.border_style))
+               .set_style(self.border_style);
         }
 
         if area.width > 2 {
@@ -184,3 +192,63 @@ impl<'a> Widget for Block<'a> {
         }
     }
 }
+
+/// Helper function to swap a border symbol to styled linetype.
+pub fn get_symbol_for_line_type(symbol: &str, style: Style) -> &str {
+    match style.line_type {
+        LineType::Reset => symbol,
+        LineType::Regular => symbol,
+
+        LineType::Heavy => match symbol {
+            line::TOP_LEFT => line_heavy::TOP_LEFT,
+            line::TOP_RIGHT => line_heavy::TOP_RIGHT,
+            line::VERTICAL => line_heavy::VERTICAL,
+            line::HORIZONTAL => line_heavy::HORIZONTAL,
+            line::BOTTOM_RIGHT => line_heavy::BOTTOM_RIGHT,
+            line::BOTTOM_LEFT => line_heavy::BOTTOM_LEFT,
+            line::VERTICAL_LEFT => line_heavy::VERTICAL_LEFT,
+            line::VERTICAL_RIGHT => line_heavy::VERTICAL_RIGHT,
+            line::HORIZONTAL_DOWN => line_heavy::HORIZONTAL_DOWN,
+            line::HORIZONTAL_UP => line_heavy::HORIZONTAL_UP,
+            _ => symbol
+        },
+
+        LineType::Double => match symbol {
+            line::TOP_LEFT => line_double::TOP_LEFT,
+            line::TOP_RIGHT => line_double::TOP_RIGHT,
+            line::VERTICAL => line_double::VERTICAL,
+            line::HORIZONTAL => line_double::HORIZONTAL,
+            line::BOTTOM_RIGHT => line_double::BOTTOM_RIGHT,
+            line::BOTTOM_LEFT => line_double::BOTTOM_LEFT,
+            line::VERTICAL_LEFT => line_double::VERTICAL_LEFT,
+            line::VERTICAL_RIGHT => line_double::VERTICAL_RIGHT,
+            line::HORIZONTAL_DOWN => line_double::HORIZONTAL_DOWN,
+            line::HORIZONTAL_UP => line_double::HORIZONTAL_UP,
+            _ => symbol
+        },
+
+        LineType::DashDouble =>
+            match symbol {
+                line::VERTICAL => line_dash_double::VERTICAL,
+                line::HORIZONTAL => line_dash_double::HORIZONTAL,
+                _ => symbol
+            },
+
+        LineType::DashTriple =>
+            match symbol {
+                line::VERTICAL => line_dash_triple::VERTICAL,
+                line::HORIZONTAL => line_dash_triple::HORIZONTAL,
+                _ => symbol
+            },
+
+        LineType::RegularRounded =>
+            match symbol {
+                line::TOP_LEFT => line_rounded::TOP_LEFT,
+                line::TOP_RIGHT => line_rounded::TOP_RIGHT,
+                line::BOTTOM_RIGHT => line_rounded::BOTTOM_RIGHT,
+                line::BOTTOM_LEFT => line_rounded::BOTTOM_LEFT,
+                _ => symbol
+            },
+    }
+}
+
