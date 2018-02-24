@@ -39,10 +39,22 @@ pub enum Modifier {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq)]
+pub enum LineType {
+    Reset,
+    Regular,
+    RegularRounded,
+    Heavy,
+    Double,
+    DashDouble,
+    DashTriple,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Style {
     pub fg: Color,
     pub bg: Color,
     pub modifier: Modifier,
+    pub line_type: LineType,
 }
 
 impl Default for Style {
@@ -51,6 +63,7 @@ impl Default for Style {
             fg: Color::Reset,
             bg: Color::Reset,
             modifier: Modifier::Reset,
+            line_type: LineType::Regular,
         }
     }
 }
@@ -60,6 +73,7 @@ impl Style {
         self.fg = Color::Reset;
         self.bg = Color::Reset;
         self.modifier = Modifier::Reset;
+        self.line_type = LineType::Reset;
     }
 
     pub fn fg(mut self, color: Color) -> Style {
@@ -72,6 +86,10 @@ impl Style {
     }
     pub fn modifier(mut self, modifier: Modifier) -> Style {
         self.modifier = modifier;
+        self
+    }
+    pub fn line_type(mut self, line_type: LineType) -> Style {
+        self.line_type = line_type;
         self
     }
 }
